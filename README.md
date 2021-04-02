@@ -247,4 +247,4 @@ A window will open with default connectionstring for localhost. Adapt the connec
 
 <img width="1904" alt="cbs_nl_buurten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394104-f5e98a00-9397-11eb-9b0a-0a49a58aa2ef.png">
 
-Tip: In the map you see a nice OpenStreetMap (OSM) layer. For that I used the QuickMapServices plugin for QGIS, that comes with a collection of easy to add basemaps.
+Tip: In the map you also see a nice OpenStreetMap (OSM) layer in the bacground. For that I used the QuickMapServices plugin for QGIS, that comes with a collection of easy to add basemaps.
