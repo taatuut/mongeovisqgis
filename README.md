@@ -4,8 +4,6 @@
 
 Created this repo as a proof of concept for storing geospatial data in MongoDB and visualzing in QGIS, and showcasing some of GDAL/OGR capabilities through ogr2ogr.
 
-Using CBS data <TODO: link>
-
 ## Prerequisites
 
 * MongoDB 4.x (just take latest) locally or your MongoDB Atlas account
@@ -17,9 +15,9 @@ Using CBS data <TODO: link>
 
 ## Installation
 
-NOTE: The manual was created on a MacBook Pro so some commands use tools default available on MacOS (and Linux). It does not cover installing/using OS/VM or tools like Homebrew and Chocolaty.
+NOTE: This proof of concept was created on a MacBook Pro so some commands use tools default available on MacOS (and Linux). The readme does not cover extensively installing/using OS/VM, or tools like Homebrew and Chocolatey.
 
-Install the prerequisites the way you prefer. E.g. using Homebrew on MacOS or Linux to install MongoDB, MongoDB Database Tools, GDAL/OGR, jq and QGIS do:
+Install the prerequisites the way you prefer. E.g. using Homebrew on MacOS or Linux to install MongoDB, MongoDB Database Tools, GDAL/OGR, jq and QGIS:
 
 ```
 brew tap mongodb/brew
@@ -34,13 +32,11 @@ On Windows use for example Chocolatey, or download and run the relevant installe
 
 ## Data
 
-Central Bureau Statistiek (CBS) dataset Netherlands Municipalities 2020
-
-<TODO: link>
+Using Central Bureau Statistiek (CBS) Wijk- en Buurtkaart 2020 data. Description and https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020 direct download from https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
 
 ## Summary
 
-Esri Shapefile to CSV/WKT to Geojson to MongoDB with 2dsphere index then displayed in QGIS using Mongo Connector plugin
+From Esri Shapefile to CSV/WKT with CRS change, then explode MULTI part geometries, from CSV/WKT to Geojson, prepare format with jq for mongoimport, load into MongoDB, create  2dsphere index, then display in QGIS using Mongo Connector plugin.
 
 ## Steps
 
@@ -50,11 +46,15 @@ Convert from Shapefile format to CSV with geometry in WKT while transforming coo
 
 #### Gemeenten
 
+```
 ogr2ogr -f CSV nl_gemeenten_2020.csv gemeente_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
+```
 
 #### Buurten
 
+```
 ogr2ogr -f CSV nl_buurten_2020.csv buurt_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
+```
 
 ### Explode MULTIPOLYGON objects
 
@@ -78,21 +78,29 @@ RTTOPO warning: Hole lies outside shell at or near point 4.4235497275776696 51.7
 
 Get columns from header line in CSV file:
 
+```
 WKT,GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area
+```
 
 Selecting all columns in the example below, putting the validated geometry as the last one
 
+```
 ogr2ogr -explodecollections -f CSV nl_gemeenten_2020.xp.csv -dialect sqlite -sql "SELECT GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM nl_gemeenten_2020" nl_gemeenten_2020.csv -nlt POLYGON -lco GEOMETRY=AS_WKT
+```
 
 #### Buurten
 
 Get columns from header line in CSV file:
 
+```
 WKT,BU_CODE,JRSTATCODE,BU_NAAM,WK_CODE,WK_NAAM,GM_CODE,GM_NAAM,IND_WBI,H2O,POSTCODE,DEK_PERC,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area
+```
 
 Selecting all columns in the example below, putting the validated geometry as the last one
 
+```
 ogr2ogr -explodecollections -f CSV nl_buurten_2020.xp.csv -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE,BU_NAAM,WK_CODE,WK_NAAM,GM_CODE,GM_NAAM,IND_WBI,H2O,POSTCODE,DEK_PERC,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM nl_buurten_2020" nl_buurten_2020.csv -nlt POLYGON -lco GEOMETRY=AS_WKT
+```
 
 ### CSV/WKT to Geojson
 
@@ -112,11 +120,15 @@ ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE
 
 #### Gemeenten
 
+```
 cat nl_gemeenten_2020.json | jq -c '.features[]' > nl_gemeenten_2020.jq.json
+```
 
 #### Buurten
 
+```
 cat nl_buurten_2020.json | jq -c '.features[]' > nl_buurten_2020.jq.json
+```
 
 ### mongoimport
 
@@ -148,7 +160,7 @@ mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_buurten_
 
 ### geospatial index
 
-Create 2dsphere index on geometry, using Compass or Atlas UI, or mongo shell:
+Create 2dsphere index on geometry, through the wizad in Compass or Atlas UI, or using MQL in any of the available tools including mongo shell:
 
 #### Gemeenten
 
