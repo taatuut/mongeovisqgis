@@ -30,9 +30,9 @@ brew install qgis
 
 On Windows use for example Chocolatey, or download and run the relevant installers.
 
-QGIS comes with its own Python installtion (version 3.8 for QGIS 3.18.1-Zürich). To install PyMongo open a terminal for the QGIS installation folder then in bin look for pyjton3.8 and install pymongo there. To find the 
+QGIS comes with its own Python installtion (version 3.8 for QGIS 3.18.1-Zürich). To install PyMongo open a terminal to find the QGIS installation folder first. Then use that path to find the `bin` folder where you will find the Python executable. Use that executable to install PyMongo for QGIS. 
 
-*** Install PyMongo for QGIS ***
+### Install PyMongo for QGIS
 
 In QGIS open the Python Console and run following code to check for the QGIS installation folder:
 
@@ -79,7 +79,7 @@ Unzip the file `wijkbuurtkaart_2020_v1.zip` at a location of your choice.
 
 ## Summary
 
-Convert the CBS data from Esri Shapefile to CSV/WKT with CRS change, then explode MULTI***  geometries into separate parts, convert from CSV/WKT to Geojson, prepare format for mongoimport using jq, load into MongoDB, create `2dsphere` index, then display in QGIS using Mongo Connector plugin and do your geospatial things there.
+Convert the CBS data from Esri Shapefile to CSV/WKT with CRS change, then explode MULTIxxx geometries into separate parts, convert from CSV/WKT to Geojson, prepare format for mongoimport using jq, load into MongoDB, create `2dsphere` index, then display in QGIS using Mongo Connector plugin and do your geospatial things there.
 
 ## Steps
 
@@ -87,13 +87,13 @@ Convert the CBS data from Esri Shapefile to CSV/WKT with CRS change, then explod
 
 Convert from Shapefile format to CSV with geometry in WKT while transforming coordinate system from RD to WGS84.
 
-#### Gemeenten
+**Gemeenten**
 
 ```
 ogr2ogr -f CSV nl_gemeenten_2020.csv gemeente_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
 ```
 
-#### Buurten
+**Buurten**
 
 ```
 ogr2ogr -f CSV nl_buurten_2020.csv buurt_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
@@ -119,7 +119,7 @@ RTTOPO warning: Hole lies outside shell at or near point 5.0370504170311703 52.9
 RTTOPO warning: Hole lies outside shell at or near point 4.4235497275776696 51.709474841912602
 ```
 
-#### Gemeenten
+**Gemeenten**
 
 Get columns from header line in CSV file:
 
@@ -133,7 +133,7 @@ Selecting all columns in the example below, putting the validated geometry as th
 ogr2ogr -explodecollections -f CSV nl_gemeenten_2020.xp.csv -dialect sqlite -sql "SELECT GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM nl_gemeenten_2020" nl_gemeenten_2020.csv -nlt POLYGON -lco GEOMETRY=AS_WKT
 ```
 
-#### Buurten
+**Buurten**
 
 Get columns from header line in CSV file:
 
@@ -149,13 +149,13 @@ ogr2ogr -explodecollections -f CSV nl_buurten_2020.xp.csv -dialect sqlite -sql "
 
 ### CSV/WKT to Geojson
 
-#### Gemeenten
+**Gemeenten**
 
 ```
 ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM 'nl_gemeenten_2020.xp'" nl_gemeenten_2020.xp.csv  -a_srs EPSG:4326 > nl_gemeenten_2020.json
 ```
 
-#### Buurten
+**Buurten**
 
 ```
 ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE,BU_NAAM,WK_CODE,WK_NAAM,GM_CODE,GM_NAAM,IND_WBI,H2O,POSTCODE,DEK_PERC,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM 'nl_buurten_2020.xp'" nl_buurten_2020.xp.csv  -a_srs EPSG:4326 > nl_buurten_2020.json
@@ -163,13 +163,13 @@ ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE
 
 ### Store in format suitable for mongoimport
 
-#### Gemeenten
+**Gemeenten**
 
 ```
 cat nl_gemeenten_2020.json | jq -c '.features[]' > nl_gemeenten_2020.jq.json
 ```
 
-#### Buurten
+**Buurten**
 
 ```
 cat nl_buurten_2020.json | jq -c '.features[]' > nl_buurten_2020.jq.json
@@ -177,7 +177,7 @@ cat nl_buurten_2020.json | jq -c '.features[]' > nl_buurten_2020.jq.json
 
 ### mongoimport
 
-#### Gemeenten
+**Gemeenten**
 
 ```
 mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_gemeenten_2020 --file nl_gemeenten_2020.jq.json
@@ -189,7 +189,7 @@ mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_gemeente
 2021-04-01T13:09:11.718+0200    imported 1142 documents
 ```
 
-#### Buurten
+**Buurten**
 
 ```
 mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_buurten_2020 --file nl_buurten_2020.jq.json
@@ -207,13 +207,13 @@ mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_buurten_
 
 Create 2dsphere index on geometry, through the wizad in Compass or Atlas UI, or using MQL in any of the available tools including mongo shell:
 
-#### Gemeenten
+**Gemeenten**
 
 ```
 db.nl_gemeenten_2020.createIndex( { geometry: "2dsphere" } )
 ```
 
-#### Buurten
+**Buurten**
 
 ```
 db.nl_buurten_2020.createIndex( { geometry: "2dsphere" } )
@@ -221,15 +221,15 @@ db.nl_buurten_2020.createIndex( { geometry: "2dsphere" } )
 
 ### QGIS Mongo Connector plugin
 
-*** Open QGIS ***
+**Open QGIS**
 
-*** Install Mongo Connector plugin 1.3.1 ***
+**Install Mongo Connector plugin 1.3.1**
 
 <img width="278" alt="QGIS_plugins" src="https://user-images.githubusercontent.com/2260360/113393936-ab680d80-9397-11eb-892f-963ca0e20ba9.png">
 
 <img width="987" alt="QGIS_plugins_mongoconnector" src="https://user-images.githubusercontent.com/2260360/113393956-b4f17580-9397-11eb-98ef-e62f708e0739.png">
 
-*** Add mongodb layer(s) ***
+**Add mongodb layer(s)**
 
 In menu Database select Mongo Connector and then Connect
 
@@ -239,7 +239,7 @@ A window will open with default connectionstring for localhost. Adapt the connec
 
 <img width="340" alt="MongoDBConnector_Widget" src="https://user-images.githubusercontent.com/2260360/113394003-c9ce0900-9397-11eb-88c2-5f822c6a9895.png">
 
-*** Explore the data ***
+**Explore the data**
 
 <img width="1792" alt="cbs_nl_gemeenten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394042-de120600-9397-11eb-8253-2aaa839b68a5.png">
 
