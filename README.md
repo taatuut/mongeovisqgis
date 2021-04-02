@@ -73,7 +73,9 @@ Install PyMongo by selecting the appropriate Python executable (or alias):
 
 ## Data
 
-This example uses the data from Dutch Central Bureau Statistiek (CBS), especially the Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip Feel free to use any dataset you like, startpoint here is Esri Shapefiles. 
+This example uses data from Dutch Central Bureau Statistiek (CBS), especially the Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
+
+Feel free to use any dataset you like, startpoint here is Esri Shapefiles. 
 
 Unzip the file `wijkbuurtkaart_2020_v1.zip` at a location of your choice.
 
@@ -87,13 +89,13 @@ Convert the CBS data from Esri Shapefile to CSV/WKT with CRS change, then explod
 
 Convert from Shapefile format to CSV with geometry in WKT while transforming coordinate system from RD to WGS84.
 
-**Gemeenten**
+_**Gemeenten**_
 
 ```
 ogr2ogr -f CSV nl_gemeenten_2020.csv gemeente_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
 ```
 
-**Buurten**
+_**Buurten**_
 
 ```
 ogr2ogr -f CSV nl_buurten_2020.csv buurt_2020_v1.shp -nlt POLYGON -lco GEOMETRY=AS_WKT -a_srs EPSG:28992 -t_srs EPSG:4326
@@ -119,7 +121,7 @@ RTTOPO warning: Hole lies outside shell at or near point 5.0370504170311703 52.9
 RTTOPO warning: Hole lies outside shell at or near point 4.4235497275776696 51.709474841912602
 ```
 
-**Gemeenten**
+_**Gemeenten**_
 
 Get columns from header line in CSV file:
 
@@ -133,7 +135,7 @@ Selecting all columns in the example below, putting the validated geometry as th
 ogr2ogr -explodecollections -f CSV nl_gemeenten_2020.xp.csv -dialect sqlite -sql "SELECT GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM nl_gemeenten_2020" nl_gemeenten_2020.csv -nlt POLYGON -lco GEOMETRY=AS_WKT
 ```
 
-**Buurten**
+_**Buurten**_
 
 Get columns from header line in CSV file:
 
@@ -149,13 +151,13 @@ ogr2ogr -explodecollections -f CSV nl_buurten_2020.xp.csv -dialect sqlite -sql "
 
 ### CSV/WKT to Geojson
 
-**Gemeenten**
+_**Gemeenten**_
 
 ```
 ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT GM_CODE,JRSTATCODE,GM_NAAM,H2O,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM 'nl_gemeenten_2020.xp'" nl_gemeenten_2020.xp.csv  -a_srs EPSG:4326 > nl_gemeenten_2020.json
 ```
 
-**Buurten**
+_**Buurten**_
 
 ```
 ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE,BU_NAAM,WK_CODE,WK_NAAM,GM_CODE,GM_NAAM,IND_WBI,H2O,POSTCODE,DEK_PERC,OAD,STED,BEV_DICHTH,AANT_INW,AANT_MAN,AANT_VROUW,P_00_14_JR,P_15_24_JR,P_25_44_JR,P_45_64_JR,P_65_EO_JR,P_ONGEHUWD,P_GEHUWD,P_GESCHEID,P_VERWEDUW,AANTAL_HH,P_EENP_HH,P_HH_Z_K,P_HH_M_K,GEM_HH_GR,P_WEST_AL,P_N_W_AL,P_MAROKKO,P_ANT_ARU,P_SURINAM,P_TURKIJE,P_OVER_NW,OPP_TOT,OPP_LAND,OPP_WATER,Shape_Leng,Shape_Area,ST_MakeValid(GeomFromText(WKT)) FROM 'nl_buurten_2020.xp'" nl_buurten_2020.xp.csv  -a_srs EPSG:4326 > nl_buurten_2020.json
@@ -163,13 +165,13 @@ ogr2ogr -f "geojson" /vsistdout/ -dialect sqlite -sql "SELECT BU_CODE,JRSTATCODE
 
 ### Store in format suitable for mongoimport
 
-**Gemeenten**
+_**Gemeenten**_
 
 ```
 cat nl_gemeenten_2020.json | jq -c '.features[]' > nl_gemeenten_2020.jq.json
 ```
 
-**Buurten**
+_**Buurten**_
 
 ```
 cat nl_buurten_2020.json | jq -c '.features[]' > nl_buurten_2020.jq.json
@@ -177,7 +179,7 @@ cat nl_buurten_2020.json | jq -c '.features[]' > nl_buurten_2020.jq.json
 
 ### mongoimport
 
-**Gemeenten**
+_**Gemeenten**_
 
 ```
 mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_gemeenten_2020 --file nl_gemeenten_2020.jq.json
@@ -189,7 +191,7 @@ mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_gemeente
 2021-04-01T13:09:11.718+0200    imported 1142 documents
 ```
 
-**Buurten**
+_**Buurten**_
 
 ```
 mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_buurten_2020 --file nl_buurten_2020.jq.json
@@ -207,13 +209,13 @@ mongoimport --uri mongodb://127.0.0.1:27017/test --drop --collection nl_buurten_
 
 Create 2dsphere index on geometry, through the wizad in Compass or Atlas UI, or using MQL in any of the available tools including mongo shell:
 
-**Gemeenten**
+_**Gemeenten**_
 
 ```
 db.nl_gemeenten_2020.createIndex( { geometry: "2dsphere" } )
 ```
 
-**Buurten**
+_**Buurten**_
 
 ```
 db.nl_buurten_2020.createIndex( { geometry: "2dsphere" } )
