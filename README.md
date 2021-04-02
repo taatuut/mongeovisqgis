@@ -184,9 +184,13 @@ Install Mongo Connector plugin 1.3.1
 
 <img width="987" alt="QGIS_plugins_mongoconnector" src="https://user-images.githubusercontent.com/2260360/113393956-b4f17580-9397-11eb-98ef-e62f708e0739.png">
 
-Load layer(s)
+Add mongodb layer(s)
+
+In menu Database select Mongo Connector and then Connect
 
 <img width="325" alt="MongoDBConnector_Menu" src="https://user-images.githubusercontent.com/2260360/113393986-c20e6480-9397-11eb-85cd-76d747d1976c.png">
+
+A window will open with default connectionstring for localhost. Adapt the connectionstring as needed. Click [ Refresh Databases ] and select the database that has the collections with the spatial data. Then select the relevant collection and clik 'geojson geometry' to add the layer. 
 
 <img width="340" alt="MongoDBConnector_Widget" src="https://user-images.githubusercontent.com/2260360/113394003-c9ce0900-9397-11eb-88c2-5f822c6a9895.png">
 
