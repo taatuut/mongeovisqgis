@@ -47,7 +47,7 @@ This gives back a path to the executable like:
 /Applications/QGIS.app/Contents/MacOS/QGIS
 ```
 
-<TODO: image>
+<img width="762" alt="QGIS_python_console" src="https://user-images.githubusercontent.com/2260360/113404589-b4150f80-93a8-11eb-853e-963a19b69ea8.png">
 
 In a terminal go the `/bin` folder using the path to the executable by replacing `/QGIS` with `/bin`. Then list the folder contents to find the Python executable:
 
