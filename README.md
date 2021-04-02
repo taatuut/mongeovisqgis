@@ -2,16 +2,16 @@
 
 ## Introduction
 
-Created this repo as a proof of concept for storing geospatial data in MongoDB and visualzing in QGIS, and showcasing some of GDAL/OGR capabilities through ogr2ogr.
+I created this repository as a proof of concept for storing geospatial data in MongoDB and visualzing in QGIS, and showcasing some of GDAL/OGR capabilities through ogr2ogr.
 
 ## Prerequisites
 
 * MongoDB 4.x (just take latest) locally or your MongoDB Atlas account
-* ogr2ogr from GDAL/OGR
-* QGIS 3.18.1-Zürich
-* MongoConnector 1.3.1 plugin for QGIS https://github.com/gospodarka-przestrzenna/MongoConnector
-* jq
-* Some other command line tools like cat, or alternatively chain some steps in one command to avoid using cat and intermediate files
+* ogr2ogr, part of GDAL/OGR
+* Latest QGIS stable release, with PyMongo installed for QGIS (see installation) 
+* MongoConnector 1.3.1 or newer plugin for QGIS https://github.com/gospodarka-przestrzenna/MongoConnector
+* `jq`
+* Some other command line tools like `cat`, or alternatively chain some steps in one command to avoid both using `cat` and creating intermediate files
 
 ## Installation
 
@@ -30,13 +30,56 @@ brew install qgis
 
 On Windows use for example Chocolatey, or download and run the relevant installers.
 
+QGIS comes with its own Python installtion (version 3.8 for QGIS 3.18.1-Zürich). To install PyMongo open a terminal for the QGIS installation folder then in bin look for pyjton3.8 and install pymongo there. To find the 
+
+*** Install PyMongo for QGIS ***
+
+In QGIS open the Python Console and run following code to check for the QGIS installation folder:
+
+```
+import sys
+print(sys.executable)
+```
+
+This gives back a path to the executable like:
+
+```
+/Applications/QGIS.app/Contents/MacOS/QGIS
+```
+
+<TODO: image>
+
+In a terminal go the `/bin` folder using the path to the executable by replacing `/QGIS` with `/bin`. Then list the folder contents to find the Python executable:
+
+```
+cd /Applications/QGIS.app/Contents/MacOS/bin/
+ls -al python*
+```
+
+Gives back something like:
+
+```
+python3 -> python3.8
+python3-config -> python3.8-config
+python3.8
+python3.8-config
+```
+
+Install PyMongo by selecting the appropriate Python executable (or alias):
+
+```
+./python3.8 -m pip install pymongo
+```
+
 ## Data
 
-Using Central Bureau Statistiek (CBS) Wijk- en Buurtkaart 2020 data. Description and https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020 direct download from https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
+Using the data from Central Bureau Statistiek (CBS) Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
+
+Unzip the file `wijkbuurtkaart_2020_v1.zip` at a location of your choice.
 
 ## Summary
 
-From Esri Shapefile to CSV/WKT with CRS change, then explode MULTI part geometries, from CSV/WKT to Geojson, prepare format with jq for mongoimport, load into MongoDB, create  2dsphere index, then display in QGIS using Mongo Connector plugin.
+Convert the CBS data from Esri Shapefile to CSV/WKT with CRS change, then explode MULTI***  geometries into separate parts, convert from CSV/WKT to Geojson, prepare format for mongoimport using jq, load into MongoDB, create `2dsphere` index, then display in QGIS using Mongo Connector plugin and do your geospatial things there.
 
 ## Steps
 
@@ -70,7 +113,9 @@ During this operation you might see some RTTOPE warnings like below, these can b
 
 ```
 RTTOPO warning: Hole lies outside shell at or near point 5.2958321274823703 53.067692190656501
+
 RTTOPO warning: Hole lies outside shell at or near point 5.0370504170311703 52.922703651113999
+
 RTTOPO warning: Hole lies outside shell at or near point 4.4235497275776696 51.709474841912602
 ```
 
@@ -176,15 +221,15 @@ db.nl_buurten_2020.createIndex( { geometry: "2dsphere" } )
 
 ### QGIS Mongo Connector plugin
 
-Open QGIS
+*** Open QGIS ***
 
-Install Mongo Connector plugin 1.3.1
+*** Install Mongo Connector plugin 1.3.1 ***
 
 <img width="278" alt="QGIS_plugins" src="https://user-images.githubusercontent.com/2260360/113393936-ab680d80-9397-11eb-892f-963ca0e20ba9.png">
 
 <img width="987" alt="QGIS_plugins_mongoconnector" src="https://user-images.githubusercontent.com/2260360/113393956-b4f17580-9397-11eb-98ef-e62f708e0739.png">
 
-Add mongodb layer(s)
+*** Add mongodb layer(s) ***
 
 In menu Database select Mongo Connector and then Connect
 
@@ -194,7 +239,7 @@ A window will open with default connectionstring for localhost. Adapt the connec
 
 <img width="340" alt="MongoDBConnector_Widget" src="https://user-images.githubusercontent.com/2260360/113394003-c9ce0900-9397-11eb-88c2-5f822c6a9895.png">
 
-Explore the data
+*** Explore the data ***
 
 <img width="1792" alt="cbs_nl_gemeenten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394042-de120600-9397-11eb-8253-2aaa839b68a5.png">
 
