@@ -30,7 +30,7 @@ brew install qgis
 
 On Windows use for example Chocolatey, or download and run the relevant installers.
 
-QGIS comes with its own Python installtion (version 3.8 for QGIS 3.18.1-Zürich). To install PyMongo open a terminal to find the QGIS installation folder first. Then use that path to find the `bin` folder where you will find the Python executable. Use that executable to install PyMongo for QGIS. 
+QGIS comes with its own Python installation (version 3.8 for QGIS 3.18.1-Zürich). To install PyMongo open a terminal to find the QGIS installation folder first. Then use that path to find the `bin` folder where you will find the Python executable. Use that executable to install PyMongo for QGIS. 
 
 ### Install PyMongo for QGIS
 
@@ -49,7 +49,7 @@ This gives back a path to the executable like:
 
 <img width="762" alt="QGIS_python_console" src="https://user-images.githubusercontent.com/2260360/113404589-b4150f80-93a8-11eb-853e-963a19b69ea8.png">
 
-In a terminal go the `/bin` folder using the path to the executable by replacing `/QGIS` with `/bin`. Then list the folder contents to find the Python executable:
+In a terminal go the `bin` folder using the path to the executable by replacing `QGIS` with `bin`. Then list the folder contents to find the Python executable:
 
 ```
 cd /Applications/QGIS.app/Contents/MacOS/bin/
@@ -73,7 +73,7 @@ Install PyMongo by selecting the appropriate Python executable (or alias):
 
 ## Data
 
-Using the data from Central Bureau Statistiek (CBS) Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
+This example uses the data from Dutch Central Bureau Statistiek (CBS), especially the Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip Feel free to use any dataset you like, startpoint here is Esri Shapefiles. 
 
 Unzip the file `wijkbuurtkaart_2020_v1.zip` at a location of your choice.
 
@@ -244,3 +244,5 @@ A window will open with default connectionstring for localhost. Adapt the connec
 <img width="1792" alt="cbs_nl_gemeenten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394042-de120600-9397-11eb-8253-2aaa839b68a5.png">
 
 <img width="1904" alt="cbs_nl_buurten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394104-f5e98a00-9397-11eb-9b0a-0a49a58aa2ef.png">
+
+Tip: In the map you see a nice OpenStreetMap (OSM) layer. For that I used the QuickMapServices plugin for QGIS, that comes with a collection of easy to add basemaps.
