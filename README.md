@@ -176,8 +176,22 @@ db.nl_buurten_2020.createIndex( { geometry: "2dsphere" } )
 
 ### QGIS Mongo Connector plugin
 
+Open QGIS
+
 Install Mongo Connector plugin 1.3.1
+
+<img width="278" alt="QGIS_plugins" src="https://user-images.githubusercontent.com/2260360/113393936-ab680d80-9397-11eb-892f-963ca0e20ba9.png">
+
+<img width="987" alt="QGIS_plugins_mongoconnector" src="https://user-images.githubusercontent.com/2260360/113393956-b4f17580-9397-11eb-98ef-e62f708e0739.png">
 
 Load layer(s)
 
-See images cbs_nl_gemeenten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis.png and cbs_nl_buurten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis.png
+<img width="325" alt="MongoDBConnector_Menu" src="https://user-images.githubusercontent.com/2260360/113393986-c20e6480-9397-11eb-85cd-76d747d1976c.png">
+
+<img width="340" alt="MongoDBConnector_Widget" src="https://user-images.githubusercontent.com/2260360/113394003-c9ce0900-9397-11eb-88c2-5f822c6a9895.png">
+
+Explore the data
+
+<img width="1792" alt="cbs_nl_gemeenten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394042-de120600-9397-11eb-8253-2aaa839b68a5.png">
+
+<img width="1904" alt="cbs_nl_buurten_2020_shp2wkt2geojson2mdb_2dsphereindex_qgis" src="https://user-images.githubusercontent.com/2260360/113394104-f5e98a00-9397-11eb-9b0a-0a49a58aa2ef.png">
