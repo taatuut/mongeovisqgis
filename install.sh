@@ -1,9 +1,16 @@
-brew tap mongodb/brew
-brew install mongodb-community@4.4
-brew install mongodb-database-tools
+#!/bin/bash
+
+# You probably already have mongodb + tools installed
+#brew tap mongodb/brew
+#brew install mongodb-community@4.4
+#brew install mongodb-database-tools
+
 brew install gdal
 brew install jq
 brew install qgis
+# we're using wget to get the map
+brew install wget
+
 /Applications/QGIS.app/Contents/MacOS/bin/python3 -m pip install pymongo
 wget -O maps.zip https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v2.zip
 unzip maps.zip
