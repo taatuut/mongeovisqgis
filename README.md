@@ -73,7 +73,7 @@ Install PyMongo by selecting the appropriate Python executable (or alias):
 
 ## Data
 
-This example uses data from Dutch Central Bureau Statistiek (CBS), specifically the Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v1.zip
+This example uses data from Dutch Central Bureau Statistiek (CBS), specifically the Wijk- en Buurtkaart 2020. This can be found at https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2020, with direct download at https://www.cbs.nl/-/media/cbs/dossiers/nederland-regionaal/wijk-en-buurtstatistieken/wijkbuurtkaart_2020_v2.zip. Direct link may get broken, check the homepage if so.
 
 Feel free to use any dataset you like, startpoint here is Esri Shapefiles. 
 
