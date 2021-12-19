@@ -74,7 +74,16 @@ Install PyMongo by selecting the appropriate Python executable (or alias):
 
 ```
 ./python3.8 -m pip install pymongo
+./python3.8 -m pip install dnspython
 ```
+
+NOTE: if you don't have `dnspython` module installed you will get error when using `mongodb+srv` urls:
+
+`pymongo.errors.ConfigurationError: The "dnspython" module must be installed to use mongodb+srv:// URIs`
+
+Also not that with this plugin adding the port is required:
+
+`mongodb+srv://user:pass@some.cluster.mongodb.net/database:27017`
 
 ## Data
 
