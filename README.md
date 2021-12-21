@@ -81,7 +81,7 @@ NOTE: if you don't have `dnspython` module installed you will get error when usi
 
 `pymongo.errors.ConfigurationError: The "dnspython" module must be installed to use mongodb+srv:// URIs`
 
-Also not that with this plugin adding the port is required:
+Also note that with this plugin adding the port is required:
 
 `mongodb+srv://user:pass@some.cluster.mongodb.net/database:27017`
 
